@@ -11,6 +11,7 @@ const LOCAL_VIDEOS = [
 ].map(code => ({
   src: `/assets/Video by tractorgyan [${code}].mp4`,
   code,
+  link: `https://www.instagram.com/reel/${code}/`,
 }));
 
 /* ─────────────────────────────────────────
@@ -205,22 +206,55 @@ function ChapterNav() {
    YT VIDEO BANNER
 ───────────────────────────────────────── */
 function YTVideoBanner({ videoId, title }) {
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&enablejsapi=1`;
+  const containerRef = useRef(null);
+  const iframeRef = useRef(null);
+  const [iframeSrc, setIframeSrc] = useState("");
+
+  useEffect(() => {
+    // Build URL — playsinline=1 is critical for mobile autoplay
+    const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1&enablejsapi=1`;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Set src when visible — forces autoplay to trigger
+          setIframeSrc(url);
+        } else {
+          // Reset src when off-screen so it autoplays again when scrolled back
+          setIframeSrc("");
+        }
+      },
+      { threshold: 0.25 }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [videoId]);
+
   return (
-    <section style={{ position: "relative", background: "#000", overflow: "hidden", height: "clamp(260px,45vw,520px)", width: "100%" }}>
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+    <section
+      ref={containerRef}
+      style={{ position: "relative", background: "#000", overflow: "hidden", height: "clamp(260px,45vw,520px)", width: "100%" }}
+    >
+      {/* Wrapper that is 16:9 but scaled to cover the container */}
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
         <iframe
-          src={embedUrl}
+          ref={iframeRef}
+          src={iframeSrc}
           frameBorder="0"
-          allow="autoplay; encrypted-media"
+          allow="autoplay; muted; encrypted-media; picture-in-picture"
           allowFullScreen
           style={{
+            /* Scale up so a 16:9 iframe covers any aspect-ratio container */
             position: "absolute",
             top: "50%", left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "100%", height: "100%",
-            minWidth: "177.78vh",
+            transform: "translate(-50%, -50%) scale(1.02)", /* tiny extra to hide 1px gaps */
+            /* Always at least the full container width AND height */
+            width: "calc(100% + 4px)",
+            height: "calc(100% + 4px)",
+            /* If container is wider than 16:9, expand height to cover */
             minHeight: "56.25vw",
+            /* If container is taller than 16:9, expand width to cover */
+            minWidth: "177.78vh",
             pointerEvents: "none",
           }}
           title={title}
@@ -238,7 +272,7 @@ function YTVideoBanner({ videoId, title }) {
 /* ─────────────────────────────────────────
    LOCAL VIDEO SHORT CARD
 ───────────────────────────────────────── */
-function LocalVideoShort({ src }) {
+function LocalVideoShort({ src, link }) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [hovered, setHovered] = useState(false);
@@ -261,10 +295,15 @@ function LocalVideoShort({ src }) {
 
   if (error) return null;
 
+  const handleClick = () => {
+    if (link) window.open(link, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div
       ref={containerRef}
-      style={{ flexShrink: 0, cursor: "pointer", position: "relative" }}
+      onClick={handleClick}
+      style={{ flexShrink: 0, cursor: link ? "pointer" : "default", position: "relative" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -285,20 +324,33 @@ function LocalVideoShort({ src }) {
           onError={() => setError(true)}
         />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%)", pointerEvents: "none" }} />
+        {/* Hover overlay — Instagram icon */}
         <div style={{
           position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
           opacity: hovered ? 1 : 0, transition: "opacity 0.25s",
+          background: hovered ? "rgba(0,0,0,0.32)" : "transparent",
         }}>
-          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.92)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="black" style={{ marginLeft: 2 }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: "50%",
+            background: "linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+          }}>
+            {/* Instagram play/open icon */}
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="white" style={{ marginLeft: 2 }}>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
+        {/* Instagram badge bottom-left */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "8px 10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#28cd41", boxShadow: "0 0 6px #28cd41" }} />
-            <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 10, fontFamily: "-apple-system,sans-serif" }}>LIVE</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="rgba(255,255,255,0.7)" stroke="none"/>
+            </svg>
+            <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 10, fontFamily: "-apple-system,sans-serif" }}>Reel</span>
           </div>
         </div>
       </div>
@@ -309,13 +361,10 @@ function LocalVideoShort({ src }) {
 /* ─────────────────────────────────────────
    SHORTS STRIP WITH SHOW MORE
 ───────────────────────────────────────── */
-function ShortsStrip({ title, badge, badgeBg, videos, initialCount = 6 }) {
-  const [showAll, setShowAll] = useState(false);
+function ShortsStrip({ title, badge, badgeBg, videos }) {
   const stripRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const displayedVideos = showAll ? videos : videos.slice(0, initialCount);
 
   const scroll = (dir) => {
     if (stripRef.current) stripRef.current.scrollBy({ left: dir * 400, behavior: "smooth" });
@@ -336,21 +385,6 @@ function ShortsStrip({ title, badge, badgeBg, videos, initialCount = 6 }) {
           <h3 style={{ color: "white", fontSize: "clamp(16px,3vw,20px)", fontWeight: 600, margin: 0, fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif", letterSpacing: "-0.018em" }}>{title}</h3>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          {videos.length > initialCount && (
-            <button
-              onClick={() => setShowAll(!showAll)}
-              style={{
-                background: "rgba(247,201,72,0.15)", border: "1px solid rgba(247,201,72,0.4)",
-                color: "#f7c948", fontSize: 12, padding: "6px 16px", borderRadius: 20,
-                cursor: "pointer", fontFamily: "-apple-system,sans-serif", fontWeight: 600,
-                transition: "background 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(247,201,72,0.25)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(247,201,72,0.15)"}
-            >
-              {showAll ? "Show Less" : `+${videos.length - initialCount} More`}
-            </button>
-          )}
           {[{ dir: -1, icon: "‹" }, { dir: 1, icon: "›" }].map(({ dir, icon }) => (
             <button key={dir} onClick={() => scroll(dir)}
               style={{
@@ -374,12 +408,12 @@ function ShortsStrip({ title, badge, badgeBg, videos, initialCount = 6 }) {
         style={{
           display: "flex", gap: 12, overflowX: "auto",
           padding: "4px 20px 8px", scrollbarWidth: "none", scrollSnapType: "x mandatory",
-          flexWrap: showAll ? "wrap" : "nowrap",
+          flexWrap: "nowrap",
         }}
       >
-        {displayedVideos.map((v, i) => (
+        {videos.map((v, i) => (
           <div key={i} style={{ scrollSnapAlign: "start" }}>
-            <LocalVideoShort src={v.src} />
+            <LocalVideoShort src={v.src} link={v.link} />
           </div>
         ))}
       </div>
@@ -436,14 +470,27 @@ function ContactSection() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
+    setError("");
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to send");
       setSent(true);
       setForm({ name: "", email: "", subject: "", message: "" });
-    }, 1200);
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -548,6 +595,15 @@ function ContactSection() {
               />
             </div>
 
+            {error && (
+              <div style={{
+                background: "rgba(255,60,60,0.12)", border: "1px solid rgba(255,60,60,0.3)",
+                borderRadius: 12, padding: "12px 16px",
+                color: "#ff6b6b", fontSize: 14, fontFamily: "-apple-system,sans-serif",
+              }}>
+                ⚠️ {error}
+              </div>
+            )}
             <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
               <button
                 type="submit" disabled={sending}
@@ -595,12 +651,51 @@ function ContactSection() {
 /* ─────────────────────────────────────────
    MY WORK SECTION
 ───────────────────────────────────────── */
+function makeReels(codes) {
+  return codes.map(code => ({
+    src: `/assets/Video by tractorgyan [${code}].mp4`,
+    code,
+    link: `https://www.instagram.com/reel/${code}/`,
+  }));
+}
+
 function MyWorkSection() {
-  const allVideos = LOCAL_VIDEOS.slice(0, 24);
-  const brandVideos = allVideos.slice(0, 10);
-  const endToEnd = allVideos.slice(10, 14);
-  const aiVideos = allVideos.slice(14, 18);
-  const trendVideos = allVideos.slice(18, 24);
+  // ── Brand-Focused Video (10 reels) ──────────────────────────────────────
+  const brandVideos = makeReels([
+    "DObCjgBAh3z",
+    "DNsQf7J3kay",
+    "DNSzQQkPV1w",
+    "DK121mNPV4Z",
+    "DOtFMlKDziB",
+    "DWYnEHEjwX2",
+    "DO0vfz3j-hV",
+    "C0OgyLTpGj7",
+    "C7lx5QGPdMf",
+    "DPoBtKiAhJT",
+  ]);
+
+  // ── End-to-End Production (4 Instagram reels only, YouTube removed) ─────
+  const endToEnd = makeReels([
+    "DT7imY4DdlE",
+    "DWoBhATE2bj",
+    "DWGs0MYj4dK",
+  ]);
+
+  // ── AI-Generated Video (4 reels) ─────────────────────────────────────────
+  const aiVideos = makeReels([
+    "DOqVpxbj4I9",
+    "DVOCGZkgnlq",
+    "DRmPikcAkbs",
+    "DQeG5Igj8IS",
+  ]);
+
+  // ── Instagram Trend Videos (4 reels) ─────────────────────────────────────
+  const trendVideos = makeReels([
+    "DIi9TV3NrmM",
+    "DAQaGDJN9nx",
+    "DAIrnhCtJPd",
+    "C3pdCC9toqy",
+  ]);
 
   const ytVideos = [
     { ytId: "xm9_4OHl2XQ", title: "Top 10 Tractors 2023" },
@@ -617,7 +712,7 @@ function MyWorkSection() {
       badge: "Brand Video",
       badgeBg: "linear-gradient(90deg,#1c1c3a,#2c2c5a)",
       title: "Brand‑Focused Video",
-      desc: "Complete production pipeline: concept development, storytelling, direction, and editing.",
+      desc: "Delivered brand-focused video projects by leading the complete production process — concept development, storytelling, direction, and editing.",
       gradient: "linear-gradient(160deg,#0d0d1a 0%,#1a1a3a 45%,#0a0a12 100%)",
       videos: brandVideos,
       tags: ["10 projects", "Instagram Reels"],
@@ -627,17 +722,17 @@ function MyWorkSection() {
       badge: "End-to-End",
       badgeBg: "linear-gradient(90deg,#3a1500,#5a2000)",
       title: "End-to-End Production",
-      desc: "Scripting, direction, anchoring, editing, and thumbnail design.",
+      desc: "Executed end-to-end production including concept development, scripting, direction, anchoring, editing, and thumbnail design.",
       gradient: "linear-gradient(160deg,#1a0800 0%,#3d1500 45%,#0d0500 100%)",
       videos: endToEnd,
-      tags: ["4 projects", "Full Pipeline"],
+      tags: ["3 projects", "Full Pipeline"],
     },
     {
       id: "ai-video",
       badge: "AI Video",
       badgeBg: "linear-gradient(90deg,#0a1a3a,#1a0a3a)",
       title: "AI‑Generated Video",
-      desc: "Creative direction meets emerging AI technology for visually unique results.",
+      desc: "Produced innovative AI-generated video content by combining creative direction with emerging technologies to deliver engaging and visually unique results.",
       gradient: "linear-gradient(160deg,#050d1a 0%,#0f1a3a 45%,#080510 100%)",
       videos: aiVideos,
       tags: ["4 projects", "AI Tools"],
@@ -647,10 +742,10 @@ function MyWorkSection() {
       badge: "Instagram Trends",
       badgeBg: "linear-gradient(90deg,#833ab4,#fd1d1d,#fcb045)",
       title: "Instagram Trend Videos",
-      desc: "Viral concepts with original storytelling — scripting, direction, editing end-to-end.",
+      desc: "Created engaging Instagram trend-based videos by aligning viral concepts with original storytelling, handling scripting, direction, editing, and thumbnail design end-to-end.",
       gradient: "linear-gradient(160deg,#1a0a2a 0%,#2d0a1a 45%,#0d0510 100%)",
       videos: trendVideos,
-      tags: ["6 projects", "Reels"],
+      tags: ["4 projects", "Reels"],
     },
   ];
 
