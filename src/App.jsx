@@ -767,21 +767,12 @@ function MyWorkSection() {
             }}>
               High-end product cinematography with cinematic color grading, motion design, and visual storytelling.
             </p>
-            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              {["4 projects", "YouTube", "Product Films"].map(tag => (
-                <span key={tag} style={{
-                  background: "rgba(247,201,72,0.1)", border: "1px solid rgba(247,201,72,0.25)",
-                  color: "rgba(247,201,72,0.9)", fontSize: 13, padding: "6px 18px", borderRadius: 20,
-                  fontFamily: "-apple-system,sans-serif",
-                }}>{tag}</span>
-              ))}
-            </div>
           </div>
         </div>
 
         {/* Cinematic thumbnail grid */}
         <div style={{ background: "#080600", padding: "20px clamp(16px,4vw,40px) 48px", overflowX: "auto", scrollbarWidth: "none", width: "100%", boxSizing: "border-box" }}>
-          <div style={{ display: "flex", gap: 14, minWidth: "max-content" }}>
+          <div style={{ display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "center" }}>
             {cinematicVideos.map((v, i) => (
               <a key={i} href={`https://youtu.be/${v.ytId}`} target="_blank" rel="noopener noreferrer"
                 style={{ flexShrink: 0, width: "clamp(200px,28vw,300px)", textDecoration: "none" }}>
@@ -854,11 +845,6 @@ function MyWorkSection() {
                 <span style={{ background: cat.badgeBg, color: "white", fontSize: 11, padding: "3px 14px", borderRadius: 4, fontWeight: 700, fontFamily: "-apple-system,sans-serif", display: "inline-block", marginBottom: 16 }}>{cat.badge}</span>
                 <h3 style={{ color: "white", fontSize: "clamp(22px,4vw,44px)", fontWeight: 700, margin: "0 0 14px", letterSpacing: "-0.025em", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif", lineHeight: 1.08 }}>{cat.title}</h3>
                 <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "clamp(14px,2.2vw,17px)", lineHeight: 1.6, margin: "0 auto 26px", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif", maxWidth: 520 }}>{cat.desc}</p>
-                <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-                  {cat.tags.map(tag => (
-                    <span key={tag} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)", fontSize: 13, padding: "6px 18px", borderRadius: 20, fontFamily: "-apple-system,sans-serif" }}>{tag}</span>
-                  ))}
-                </div>
               </div>
             </div>
 
