@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from "react";
 /* ── LOCAL ASSETS ── */
 const LOCAL_VIDEOS = [
   "C3pdCC9toqy", "DAIrnhCtJPd", "DAQaGDJN9nx", "DIi9TV3NrmM",
-  "DQeG5Igj8IS", "DRmPikcAkbs", "DVOCGZkgnIq", "DOqVpxbj4I9",
-  "DWGs0MYj4dK", "DWoBhATE2bj", "DT7imY4DdIE", "DObCjgBAh3z",
+  "DQeG5Igj8IS", "DRmPikcAkbs", "DVOCGZkgnlq", "DOqVpxbj4I9",
+  "DWGs0MYj4dK", "DWoBhATE2bj", "DT7imY4DdlE", "DObCjgBAh3z",
   "DPoBtKiAhJT", "C7lx5QGPdMf", "C0OgyLTpGj7", "DOtFMlKDziB",
-  "DO0vfz3j-hV", "DWYnEHEjwX2", "DOtFMIKDziB", "DK121mNPV4ZJ",
-  "DNSzQQkPV1w", "DNsQf7J3kay", "DWoBhATE2bj", "DobCjgBAh3z",
+  "DO0vfz3j-hV", "DWYnEHEjwX2", "DK121mNPV4Z", "DNSzQQkPV1w",
+  "DNsQf7J3kay", "DOtFMlKDziB",
 ].map(code => ({
   src: `/assets/Video by tractorgyan [${code}].mp4`,
   code,
@@ -402,7 +402,7 @@ function ShortsStrip({ title, badge, badgeBg, videos }) {
         }}
       >
         {videos.map((v, i) => (
-          <div key={i} style={{ scrollSnapAlign: "start" }}>
+          <div key={i} style={{ scrollSnapAlign: "start", marginRight: 40 }}>
             <LocalVideoShort src={v.src} link={v.link} />
           </div>
         ))}
@@ -619,14 +619,17 @@ function MyWorkSection() {
 
   const endToEnd = makeReels([
     "DT7imY4DdlE", "DWoBhATE2bj", "DWGs0MYj4dK",
+    "DX09LAetF5X", "DXWhyekE2La", "DW6FP-fD8Nl", "DTSTEZGDfba", // ← NEW
   ]);
 
   const aiVideos = makeReels([
     "DOqVpxbj4I9", "DVOCGZkgnlq", "DRmPikcAkbs", "DQeG5Igj8IS",
+    "DXRRvgSj1cJ", "DSq4wWlAkst", "DWqQMe7jRKz", // ← NEW
   ]);
 
   const trendVideos = makeReels([
     "DIi9TV3NrmM", "DAQaGDJN9nx", "DAIrnhCtJPd", "C3pdCC9toqy",
+    "DVlImRHD2eo", "DTKoAO2jX7G", "DRzGQKNjRxc", // ← NEW
   ]);
 
   const ytVideos = [
@@ -933,8 +936,8 @@ export default function App() {
   const tvYTId = "xm9_4OHl2XQ";
   const musicYTId = "DqMDi4A7Ve8";
 
-  const serviceVideos1 = LOCAL_VIDEOS.slice(0, 6);
-  const serviceVideos2 = LOCAL_VIDEOS.slice(6, 12);
+  const serviceVideos1 = LOCAL_VIDEOS.slice(0, 8);
+  const serviceVideos2 = LOCAL_VIDEOS.slice(4, 12);
 
   return (
     <div style={{
