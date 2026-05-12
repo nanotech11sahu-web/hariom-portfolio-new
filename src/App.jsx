@@ -775,7 +775,7 @@ function MyWorkSection() {
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "center" }}>
             {cinematicVideos.map((v, i) => (
               <a key={i} href={`https://youtu.be/${v.ytId}`} target="_blank" rel="noopener noreferrer"
-                style={{ flexShrink: 0, width: "clamp(200px,28vw,300px)", textDecoration: "none" }}>
+                style={{ flexShrink: 0, width: "clamp(160px,22vw,220px)", textDecoration: "none" }}>
                 <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 14, overflow: "hidden", background: "#1a1400", marginBottom: 10 }}>
                 <img
                   src={v.thumb || `https://img.youtube.com/vi/${v.ytId}/maxresdefault.jpg`}
