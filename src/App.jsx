@@ -31,6 +31,7 @@ function GlobalNav() {
     { label: "Home", id: "hero" },
     { label: "My Work", id: "my-work" },
     { label: "YouTube", id: "youtube-section" },
+    { label: "Cinematic", id: "cinematic-product" },
     { label: "Brand Videos", id: "brand-video" },
     { label: "AI Videos", id: "ai-video" },
     { label: "Instagram Reels", id: "instagram-trend" },
@@ -77,7 +78,7 @@ function GlobalNav() {
         </div>
 
         {/* Desktop Links */}
-        <div style={{ display: "flex", alignItems: "center", gap: 22, "@media(max-width:768px)": { display: "none" } }} className="desktop-nav">
+        <div style={{ display: "flex", alignItems: "center", gap: 22 }} className="desktop-nav">
           {links.map(l => (
             <button key={l.label} onClick={() => scrollTo(l.id)}
               style={{
@@ -165,6 +166,7 @@ function ChapterNav() {
   const items = [
     { id: "my-work", label: "My Work" },
     { id: "youtube-section", label: "YouTube" },
+    { id: "cinematic-product", label: "Cinematic" },
     { id: "brand-video", label: "Brand Videos" },
     { id: "end-to-end", label: "End-to-End" },
     { id: "ai-video", label: "AI Videos" },
@@ -211,16 +213,12 @@ function YTVideoBanner({ videoId, title }) {
   const [iframeSrc, setIframeSrc] = useState("");
 
   useEffect(() => {
-    // Build URL — playsinline=1 is critical for mobile autoplay
     const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1&enablejsapi=1`;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Set src when visible — forces autoplay to trigger
           setIframeSrc(url);
         } else {
-          // Reset src when off-screen so it autoplays again when scrolled back
           setIframeSrc("");
         }
       },
@@ -235,7 +233,6 @@ function YTVideoBanner({ videoId, title }) {
       ref={containerRef}
       style={{ position: "relative", background: "#000", overflow: "hidden", height: "clamp(260px,45vw,520px)", width: "100%" }}
     >
-      {/* Wrapper that is 16:9 but scaled to cover the container */}
       <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
         <iframe
           ref={iframeRef}
@@ -244,16 +241,12 @@ function YTVideoBanner({ videoId, title }) {
           allow="autoplay; muted; encrypted-media; picture-in-picture"
           allowFullScreen
           style={{
-            /* Scale up so a 16:9 iframe covers any aspect-ratio container */
             position: "absolute",
             top: "50%", left: "50%",
-            transform: "translate(-50%, -50%) scale(1.02)", /* tiny extra to hide 1px gaps */
-            /* Always at least the full container width AND height */
+            transform: "translate(-50%, -50%) scale(1.02)",
             width: "calc(100% + 4px)",
             height: "calc(100% + 4px)",
-            /* If container is wider than 16:9, expand height to cover */
             minHeight: "56.25vw",
-            /* If container is taller than 16:9, expand width to cover */
             minWidth: "177.78vh",
             pointerEvents: "none",
           }}
@@ -324,7 +317,6 @@ function LocalVideoShort({ src, link }) {
           onError={() => setError(true)}
         />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%)", pointerEvents: "none" }} />
-        {/* Hover overlay — Instagram icon */}
         <div style={{
           position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
           opacity: hovered ? 1 : 0, transition: "opacity 0.25s",
@@ -336,13 +328,11 @@ function LocalVideoShort({ src, link }) {
             display: "flex", alignItems: "center", justifyContent: "center",
             boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
           }}>
-            {/* Instagram play/open icon */}
             <svg viewBox="0 0 24 24" width="22" height="22" fill="white" style={{ marginLeft: 2 }}>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
-        {/* Instagram badge bottom-left */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "8px 10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2">
@@ -359,7 +349,7 @@ function LocalVideoShort({ src, link }) {
 }
 
 /* ─────────────────────────────────────────
-   SHORTS STRIP WITH SHOW MORE
+   SHORTS STRIP
 ───────────────────────────────────────── */
 function ShortsStrip({ title, badge, badgeBg, videos }) {
   const stripRef = useRef(null);
@@ -467,10 +457,9 @@ function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -501,7 +490,6 @@ function ContactSection() {
       width: "100%", boxSizing: "border-box",
     }}>
       <div style={{ maxWidth: 700, margin: "0 auto" }}>
-        {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 20, background: "rgba(247,201,72,0.1)", border: "1px solid rgba(247,201,72,0.25)", borderRadius: 20, padding: "6px 16px" }}>
             <span style={{ color: "#f7c948", fontSize: 12, fontFamily: "-apple-system,sans-serif", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600 }}>Contact</span>
@@ -530,13 +518,7 @@ function ContactSection() {
                   name="name" type="text" required
                   value={form.name} onChange={handleChange}
                   placeholder="Hariom Patidar"
-                  style={{
-                    width: "100%", background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12,
-                    padding: "14px 16px", color: "white", fontSize: 15,
-                    fontFamily: "-apple-system,sans-serif", outline: "none",
-                    boxSizing: "border-box", transition: "border-color 0.2s",
-                  }}
+                  style={{ width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "14px 16px", color: "white", fontSize: 15, fontFamily: "-apple-system,sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" }}
                   onFocus={e => e.target.style.borderColor = "rgba(247,201,72,0.5)"}
                   onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
                 />
@@ -547,13 +529,7 @@ function ContactSection() {
                   name="email" type="email" required
                   value={form.email} onChange={handleChange}
                   placeholder="you@example.com"
-                  style={{
-                    width: "100%", background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12,
-                    padding: "14px 16px", color: "white", fontSize: 15,
-                    fontFamily: "-apple-system,sans-serif", outline: "none",
-                    boxSizing: "border-box", transition: "border-color 0.2s",
-                  }}
+                  style={{ width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "14px 16px", color: "white", fontSize: 15, fontFamily: "-apple-system,sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" }}
                   onFocus={e => e.target.style.borderColor = "rgba(247,201,72,0.5)"}
                   onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
                 />
@@ -565,13 +541,7 @@ function ContactSection() {
                 name="subject" type="text"
                 value={form.subject} onChange={handleChange}
                 placeholder="Brand video project, YouTube editing..."
-                style={{
-                  width: "100%", background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12,
-                  padding: "14px 16px", color: "white", fontSize: 15,
-                  fontFamily: "-apple-system,sans-serif", outline: "none",
-                  boxSizing: "border-box", transition: "border-color 0.2s",
-                }}
+                style={{ width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "14px 16px", color: "white", fontSize: 15, fontFamily: "-apple-system,sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" }}
                 onFocus={e => e.target.style.borderColor = "rgba(247,201,72,0.5)"}
                 onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
               />
@@ -582,39 +552,20 @@ function ContactSection() {
                 name="message" required rows={5}
                 value={form.message} onChange={handleChange}
                 placeholder="Tell me about your project..."
-                style={{
-                  width: "100%", background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12,
-                  padding: "14px 16px", color: "white", fontSize: 15,
-                  fontFamily: "-apple-system,sans-serif", outline: "none",
-                  boxSizing: "border-box", resize: "vertical", minHeight: 140,
-                  transition: "border-color 0.2s",
-                }}
+                style={{ width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "14px 16px", color: "white", fontSize: 15, fontFamily: "-apple-system,sans-serif", outline: "none", boxSizing: "border-box", resize: "vertical", minHeight: 140, transition: "border-color 0.2s" }}
                 onFocus={e => e.target.style.borderColor = "rgba(247,201,72,0.5)"}
                 onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
               />
             </div>
-
             {error && (
-              <div style={{
-                background: "rgba(255,60,60,0.12)", border: "1px solid rgba(255,60,60,0.3)",
-                borderRadius: 12, padding: "12px 16px",
-                color: "#ff6b6b", fontSize: 14, fontFamily: "-apple-system,sans-serif",
-              }}>
+              <div style={{ background: "rgba(255,60,60,0.12)", border: "1px solid rgba(255,60,60,0.3)", borderRadius: 12, padding: "12px 16px", color: "#ff6b6b", fontSize: 14, fontFamily: "-apple-system,sans-serif" }}>
                 ⚠️ {error}
               </div>
             )}
             <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
               <button
                 type="submit" disabled={sending}
-                style={{
-                  background: sending ? "rgba(247,201,72,0.6)" : "#f7c948",
-                  color: "#000", border: "none", borderRadius: 24,
-                  padding: "14px 36px", fontSize: 15, fontWeight: 700,
-                  cursor: sending ? "not-allowed" : "pointer",
-                  fontFamily: "-apple-system,sans-serif",
-                  transition: "opacity 0.2s",
-                }}
+                style={{ background: sending ? "rgba(247,201,72,0.6)" : "#f7c948", color: "#000", border: "none", borderRadius: 24, padding: "14px 36px", fontSize: 15, fontWeight: 700, cursor: sending ? "not-allowed" : "pointer", fontFamily: "-apple-system,sans-serif", transition: "opacity 0.2s" }}
               >
                 {sending ? "Sending..." : "Send Message →"}
               </button>
@@ -660,41 +611,22 @@ function makeReels(codes) {
 }
 
 function MyWorkSection() {
-  // ── Brand-Focused Video (10 reels) ──────────────────────────────────────
   const brandVideos = makeReels([
-    "DObCjgBAh3z",
-    "DNsQf7J3kay",
-    "DNSzQQkPV1w",
-    "DK121mNPV4Z",
-    "DOtFMlKDziB",
-    "DWYnEHEjwX2",
-    "DO0vfz3j-hV",
-    "C0OgyLTpGj7",
-    "C7lx5QGPdMf",
-    "DPoBtKiAhJT",
+    "DObCjgBAh3z", "DNsQf7J3kay", "DNSzQQkPV1w", "DK121mNPV4Z",
+    "DOtFMlKDziB", "DWYnEHEjwX2", "DO0vfz3j-hV", "C0OgyLTpGj7",
+    "C7lx5QGPdMf", "DPoBtKiAhJT",
   ]);
 
-  // ── End-to-End Production (4 Instagram reels only, YouTube removed) ─────
   const endToEnd = makeReels([
-    "DT7imY4DdlE",
-    "DWoBhATE2bj",
-    "DWGs0MYj4dK",
+    "DT7imY4DdlE", "DWoBhATE2bj", "DWGs0MYj4dK",
   ]);
 
-  // ── AI-Generated Video (4 reels) ─────────────────────────────────────────
   const aiVideos = makeReels([
-    "DOqVpxbj4I9",
-    "DVOCGZkgnlq",
-    "DRmPikcAkbs",
-    "DQeG5Igj8IS",
+    "DOqVpxbj4I9", "DVOCGZkgnlq", "DRmPikcAkbs", "DQeG5Igj8IS",
   ]);
 
-  // ── Instagram Trend Videos (4 reels) ─────────────────────────────────────
   const trendVideos = makeReels([
-    "DIi9TV3NrmM",
-    "DAQaGDJN9nx",
-    "DAIrnhCtJPd",
-    "C3pdCC9toqy",
+    "DIi9TV3NrmM", "DAQaGDJN9nx", "DAIrnhCtJPd", "C3pdCC9toqy",
   ]);
 
   const ytVideos = [
@@ -704,6 +636,14 @@ function MyWorkSection() {
     { ytId: "PGjTr-XLTm0", title: "Mahindra 575 DI YUVO 4WD" },
     { ytId: "_4OYQjTEfcc", title: "New Holland 3600 TX Super" },
     { ytId: "KeKppOWl5tI", title: "YouTube Video 5" },
+  ];
+
+  // ── Cinematic Product Videos ─────────────────────────────────────────────
+  const cinematicVideos = [
+    { ytId: "iJRGrjX3IDA", title: "Cinematic Product Film" },
+    { ytId: "tKzEuhmHygw", title: "Product Showcase Reel" },
+    { ytId: "T1ceqm6bhas", title: "Brand Product Story", thumb: `https://i.ytimg.com/vi/T1ceqm6bhas/0.jpg` },
+    { ytId: "xhs2dZWahK4", title: "Cinematic Commercial" },
   ];
 
   const categories = [
@@ -749,46 +689,15 @@ function MyWorkSection() {
     },
   ];
 
-  const SECTION_DIVIDER = (
-    <div style={{ height: 2, background: "linear-gradient(90deg, transparent, rgba(247,201,72,0.3), transparent)", margin: "0" }} />
-  );
-
   return (
     <section id="my-work" style={{ background: "#000", width: "100%" }}>
 
-      {/* My Work Hero */}
-      {/* <div style={{
-        background: "linear-gradient(160deg,#0a0a0a 0%,#141414 100%)",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        padding: "clamp(60px,10vw,80px) 40px clamp(40px,7vw,60px)",
-        textAlign: "center",
-        width: "100%", boxSizing: "border-box",
-      }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 20, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 16px" }}>
-          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#28cd41", boxShadow: "0 0 8px #28cd41" }} />
-          <span style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, fontFamily: "-apple-system,sans-serif", letterSpacing: "0.06em", textTransform: "uppercase" }}>Portfolio</span>
-        </div>
-        <h2 style={{
-          color: "white", fontSize: "clamp(32px,6vw,64px)", fontWeight: 700,
-          margin: "0 0 20px", letterSpacing: "-0.03em",
-          fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif", lineHeight: 1.04,
-        }}>My Work</h2>
-        <p style={{
-          color: "rgba(255,255,255,0.52)", fontSize: "clamp(15px,2.5vw,18px)", lineHeight: 1.65,
-          margin: "0 auto", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
-          maxWidth: 600,
-        }}>
-          A curated collection of video production spanning brand storytelling, YouTube content strategy, AI-generated video, and viral Instagram reels.
-        </p>
-      </div> */}
-
-      {/* YouTube Section */}
+      {/* ── YouTube Section ───────────────────────────────────────────────── */}
       <div id="youtube-section" style={{ borderTop: "3px solid rgba(255,255,255,0.06)", marginTop: 0, width: "100%" }}>
         <div style={{
           padding: "clamp(40px,7vw,56px) clamp(20px,5vw,40px) 28px",
           background: "linear-gradient(160deg,#1a0000 0%,#3d0000 45%,#0d0000 100%)",
-          textAlign: "center",
-          width: "100%", boxSizing: "border-box",
+          textAlign: "center", width: "100%", boxSizing: "border-box",
         }}>
           <span style={{ background: "#ff0000", color: "white", fontSize: 11, padding: "3px 12px", borderRadius: 4, fontWeight: 700, fontFamily: "-apple-system,sans-serif" }}>YouTube Growth</span>
           <h3 style={{
@@ -801,7 +710,6 @@ function MyWorkSection() {
           </p>
         </div>
 
-        {/* YouTube thumbnail grid */}
         <div style={{ background: "#0a0000", padding: "20px clamp(16px,4vw,40px) 48px", overflowX: "auto", scrollbarWidth: "none", width: "100%", boxSizing: "border-box" }}>
           <div style={{ display: "flex", gap: 14, minWidth: "max-content" }}>
             {ytVideos.map((v, i) => (
@@ -827,54 +735,130 @@ function MyWorkSection() {
         </div>
       </div>
 
-      {/* Category Sections — with bigger spacing between */}
-      {categories.map((cat, idx) => (
+      {/* ── Cinematic Product Videos Section ─────────────────────────────── */}
+      <div style={{ height: "clamp(32px,6vw,64px)", background: "#000" }} />
+
+      <div id="cinematic-product" style={{ borderTop: "3px solid rgba(255,255,255,0.06)", width: "100%" }}>
+        <div style={{
+          padding: "clamp(40px,7vw,56px) clamp(20px,5vw,40px) 28px",
+          background: "linear-gradient(160deg,#0a0800 0%,#1f1800 45%,#0a0800 100%)",
+          textAlign: "center", width: "100%", boxSizing: "border-box",
+          position: "relative", overflow: "hidden",
+        }}>
+          {/* Subtle gold glow */}
+          <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "60%", height: "100%", background: "radial-gradient(ellipse, rgba(247,201,72,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <span style={{
+              background: "linear-gradient(90deg,#b8860b,#f7c948)",
+              color: "#000", fontSize: 11, padding: "3px 14px", borderRadius: 4,
+              fontWeight: 700, fontFamily: "-apple-system,sans-serif",
+            }}>🎬 Cinematic</span>
+            <h3 style={{
+              color: "white", fontSize: "clamp(22px,4vw,40px)", fontWeight: 600,
+              margin: "14px 0 10px", letterSpacing: "-0.02em",
+              fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif",
+            }}>Cinematic Product Videos</h3>
+            <p style={{
+              color: "rgba(255,255,255,0.68)", fontSize: 16, margin: "0 auto 24px",
+              fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif", maxWidth: 500,
+            }}>
+              High-end product cinematography with cinematic color grading, motion design, and visual storytelling.
+            </p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              {["4 projects", "YouTube", "Product Films"].map(tag => (
+                <span key={tag} style={{
+                  background: "rgba(247,201,72,0.1)", border: "1px solid rgba(247,201,72,0.25)",
+                  color: "rgba(247,201,72,0.9)", fontSize: 13, padding: "6px 18px", borderRadius: 20,
+                  fontFamily: "-apple-system,sans-serif",
+                }}>{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Cinematic thumbnail grid */}
+        <div style={{ background: "#080600", padding: "20px clamp(16px,4vw,40px) 48px", overflowX: "auto", scrollbarWidth: "none", width: "100%", boxSizing: "border-box" }}>
+          <div style={{ display: "flex", gap: 14, minWidth: "max-content" }}>
+            {cinematicVideos.map((v, i) => (
+              <a key={i} href={`https://youtu.be/${v.ytId}`} target="_blank" rel="noopener noreferrer"
+                style={{ flexShrink: 0, width: "clamp(200px,28vw,300px)", textDecoration: "none" }}>
+                <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 14, overflow: "hidden", background: "#1a1400", marginBottom: 10 }}>
+                <img
+                  src={v.thumb || `https://img.youtube.com/vi/${v.ytId}/maxresdefault.jpg`}
+                  alt={v.title}
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  onError={e => {
+                    if (e.target.src.includes("maxresdefault")) {
+                      e.target.src = `https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg`;
+                    } else if (e.target.src.includes("hqdefault")) {
+                      e.target.src = `https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`;
+                    } else if (e.target.src.includes("mqdefault")) {
+                      e.target.src = `https://img.youtube.com/vi/${v.ytId}/sddefault.jpg`;
+                    } else {
+                      e.target.src = `https://img.youtube.com/vi/${v.ytId}/0.jpg`;
+                    }
+                  }}
+                />
+                  {/* Dark cinematic overlay */}
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%)", pointerEvents: "none" }} />
+                  {/* Hover layer */}
+                  <div
+                    style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0)", transition: "background 0.25s", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(0,0,0,0.45)"; e.currentTarget.querySelector(".cp-play").style.opacity = "1"; e.currentTarget.querySelector(".cp-play").style.transform = "scale(1)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(0,0,0,0)"; e.currentTarget.querySelector(".cp-play").style.opacity = "0"; e.currentTarget.querySelector(".cp-play").style.transform = "scale(0.85)"; }}
+                  >
+                    <div className="cp-play" style={{
+                      width: 52, height: 52, borderRadius: "50%",
+                      background: "linear-gradient(135deg,#f7c948,#e6a800)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      opacity: 0, transform: "scale(0.85)",
+                      transition: "opacity 0.25s, transform 0.25s",
+                      boxShadow: "0 4px 20px rgba(247,201,72,0.5)",
+                    }}>
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="#000" style={{ marginLeft: 3 }}><path d="M8 5v14l11-7z" /></svg>
+                    </div>
+                  </div>
+                  {/* Gold badge */}
+                  <div style={{ position: "absolute", top: 8, right: 8, background: "linear-gradient(135deg,#f7c948,#e6a800)", borderRadius: 4, padding: "2px 8px", fontSize: 9, fontWeight: 700, color: "#000" }}>
+                    🎬 CINEMATIC
+                  </div>
+                </div>
+                <p style={{
+                  color: "rgba(255,255,255,0.88)", fontSize: 13, margin: 0,
+                  fontFamily: "-apple-system,sans-serif", fontWeight: 500,
+                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                }}>{v.title}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Category Sections ─────────────────────────────────────────────── */}
+      {categories.map((cat) => (
         <div key={cat.id}>
-          {/* Big visual divider between sections */}
           <div style={{ height: "clamp(32px,6vw,64px)", background: "#000" }} />
 
           <div id={cat.id} style={{ borderTop: "3px solid rgba(255,255,255,0.06)", width: "100%" }}>
-            {/* Category Banner */}
             <div style={{
               position: "relative",
               background: cat.gradient,
               padding: "clamp(40px,7vw,56px) clamp(20px,5vw,40px) clamp(32px,6vw,44px)",
-              textAlign: "center",
-              width: "100%", boxSizing: "border-box",
+              textAlign: "center", width: "100%", boxSizing: "border-box",
             }}>
               <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%)", pointerEvents: "none" }} />
               <div style={{ position: "relative", zIndex: 1 }}>
-                <span style={{
-                  background: cat.badgeBg, color: "white", fontSize: 11,
-                  padding: "3px 14px", borderRadius: 4, fontWeight: 700,
-                  fontFamily: "-apple-system,sans-serif", display: "inline-block", marginBottom: 16,
-                }}>{cat.badge}</span>
-                <h3 style={{
-                  color: "white", fontSize: "clamp(22px,4vw,44px)", fontWeight: 700,
-                  margin: "0 0 14px", letterSpacing: "-0.025em",
-                  fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif", lineHeight: 1.08,
-                }}>{cat.title}</h3>
-                <p style={{
-                  color: "rgba(255,255,255,0.72)", fontSize: "clamp(14px,2.2vw,17px)", lineHeight: 1.6,
-                  margin: "0 auto 26px",
-                  fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
-                  maxWidth: 520,
-                }}>{cat.desc}</p>
+                <span style={{ background: cat.badgeBg, color: "white", fontSize: 11, padding: "3px 14px", borderRadius: 4, fontWeight: 700, fontFamily: "-apple-system,sans-serif", display: "inline-block", marginBottom: 16 }}>{cat.badge}</span>
+                <h3 style={{ color: "white", fontSize: "clamp(22px,4vw,44px)", fontWeight: 700, margin: "0 0 14px", letterSpacing: "-0.025em", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif", lineHeight: 1.08 }}>{cat.title}</h3>
+                <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "clamp(14px,2.2vw,17px)", lineHeight: 1.6, margin: "0 auto 26px", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif", maxWidth: 520 }}>{cat.desc}</p>
                 <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                   {cat.tags.map(tag => (
-                    <span key={tag} style={{
-                      background: "rgba(255,255,255,0.1)",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      color: "rgba(255,255,255,0.75)", fontSize: 13,
-                      padding: "6px 18px", borderRadius: 20,
-                      fontFamily: "-apple-system,sans-serif",
-                    }}>{tag}</span>
+                    <span key={tag} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)", fontSize: 13, padding: "6px 18px", borderRadius: 20, fontFamily: "-apple-system,sans-serif" }}>{tag}</span>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Video shorts strip */}
             {cat.videos.length > 0 && (
               <ShortsStrip
                 title={cat.title}
@@ -888,11 +872,14 @@ function MyWorkSection() {
         </div>
       ))}
 
-      {/* Bottom spacing */}
       <div style={{ height: "clamp(40px,7vw,72px)", background: "#000" }} />
     </section>
   );
 }
+
+/* ─────────────────────────────────────────
+   BACKGROUND MUSIC
+───────────────────────────────────────── */
 function BackgroundMusic() {
   const playerRef = useRef(null);
   const initializedRef = useRef(false);
@@ -900,7 +887,6 @@ function BackgroundMusic() {
   const initPlayer = () => {
     if (initializedRef.current) return;
     initializedRef.current = true;
-
     playerRef.current = new window.YT.Player("yt-bg-player", {
       videoId: "mBXgbfmuY30",
       playerVars: { autoplay: 1, loop: 1, playlist: "mBXgbfmuY30", controls: 0, rel: 0 },
@@ -947,7 +933,6 @@ export default function App() {
   const tvYTId = "xm9_4OHl2XQ";
   const musicYTId = "DqMDi4A7Ve8";
 
-  // Use LOCAL_VIDEOS for the service sections instead of fake cards
   const serviceVideos1 = LOCAL_VIDEOS.slice(0, 6);
   const serviceVideos2 = LOCAL_VIDEOS.slice(6, 12);
 
@@ -957,17 +942,14 @@ export default function App() {
       minHeight: "100vh", background: "#000",
       width: "100%", overflowX: "hidden",
     }}>
-      <BackgroundMusic /> 
+      <BackgroundMusic />
       <GlobalNav />
       <ChapterNav />
       <HeroSection />
 
-      {/* Services — YouTube banner + real shorts */}
       <div id="services" style={{ width: "100%" }}>
-
         <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <YTVideoBanner videoId={tvYTId} title="Video Reel 1" />
-          {/* Show actual shorts instead of fake cards */}
           <ShortsStrip
             title="Featured Shorts"
             badge="Featured"
@@ -991,10 +973,7 @@ export default function App() {
         </section>
       </div>
 
-      {/* My Work */}
       <MyWorkSection />
-
-      {/* Contact */}
       <ContactSection />
     </div>
   );
