@@ -609,7 +609,60 @@ function makeReels(codes) {
     link: `https://www.instagram.com/reel/${code}/`,
   }));
 }
+function YouTubeContentSection() {
+  const ytVideos = [
+    { ytId: "xm9_4OHl2XQ", title: "Top 10 Tractors 2023" },
+    { ytId: "DqMDi4A7Ve8", title: "2026 में आएंगे ये ट्रैक्टर" },
+    { ytId: "8QkWeInuFPo", title: "5 ट्रैक्टर कभी ना खरीदें" },
+    { ytId: "PGjTr-XLTm0", title: "Mahindra 575 DI YUVO 4WD" },
+    { ytId: "_4OYQjTEfcc", title: "New Holland 3600 TX Super" },
+    { ytId: "KeKppOWl5tI", title: "YouTube Video 5" },
+  ];
 
+  return (
+    <div id="youtube-section" style={{ borderTop: "3px solid rgba(255,255,255,0.06)", width: "100%" }}>
+      <div style={{
+        padding: "clamp(40px,7vw,56px) clamp(20px,5vw,40px) 28px",
+        background: "linear-gradient(160deg,#1a0000 0%,#3d0000 45%,#0d0000 100%)",
+        textAlign: "center", width: "100%", boxSizing: "border-box",
+      }}>
+        <span style={{ background: "#ff0000", color: "white", fontSize: 11, padding: "3px 12px", borderRadius: 4, fontWeight: 700, fontFamily: "-apple-system,sans-serif" }}>YouTube Growth</span>
+        <h3 style={{
+          color: "white", fontSize: "clamp(22px,4vw,40px)", fontWeight: 600,
+          margin: "14px 0 10px", letterSpacing: "-0.02em",
+          fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif",
+        }}>YouTube Content</h3>
+        <p style={{ color: "rgba(255,255,255,0.68)", fontSize: 16, margin: "0 auto 24px", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif", maxWidth: 500 }}>
+          Audience engagement, retention, and platform growth.
+        </p>
+      </div>
+
+      <div style={{ background: "#0a0000", padding: "20px clamp(16px,4vw,40px) 48px", overflowX: "auto", scrollbarWidth: "none", width: "100%", boxSizing: "border-box" }}>
+        <div style={{ display: "flex", gap: 14, minWidth: "max-content" }}>
+          {ytVideos.map((v, i) => (
+            <a key={i} href={`https://youtu.be/${v.ytId}`} target="_blank" rel="noopener noreferrer"
+              style={{ flexShrink: 0, width: "clamp(160px,22vw,220px)", textDecoration: "none" }}>
+              <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#1a0000", marginBottom: 8 }}>
+                <img src={`https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg`} alt={v.title}
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0)", transition: "background 0.2s", display: "flex", alignItems: "center", justifyContent: "center" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.querySelector(".yt-play").style.opacity = "1"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "rgba(0,0,0,0)"; e.currentTarget.querySelector(".yt-play").style.opacity = "0"; }}
+                >
+                  <div className="yt-play" style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(255,0,0,0.92)", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 0.2s" }}>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="white" style={{ marginLeft: 2 }}><path d="M8 5v14l11-7z" /></svg>
+                  </div>
+                </div>
+                <div style={{ position: "absolute", top: 6, right: 6, background: "#ff0000", borderRadius: 4, padding: "2px 6px", fontSize: 9, fontWeight: 700, color: "white" }}>YT</div>
+              </div>
+              <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, margin: 0, fontFamily: "-apple-system,sans-serif", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.title}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 function MyWorkSection() {
   const brandVideos = makeReels([
     "DObCjgBAh3z", "DNsQf7J3kay", "DNSzQQkPV1w", "DK121mNPV4Z",
@@ -694,49 +747,6 @@ function MyWorkSection() {
 
   return (
     <section id="my-work" style={{ background: "#000", width: "100%" }}>
-
-      {/* ── YouTube Section ───────────────────────────────────────────────── */}
-      <div id="youtube-section" style={{ borderTop: "3px solid rgba(255,255,255,0.06)", marginTop: 0, width: "100%" }}>
-        <div style={{
-          padding: "clamp(40px,7vw,56px) clamp(20px,5vw,40px) 28px",
-          background: "linear-gradient(160deg,#1a0000 0%,#3d0000 45%,#0d0000 100%)",
-          textAlign: "center", width: "100%", boxSizing: "border-box",
-        }}>
-          <span style={{ background: "#ff0000", color: "white", fontSize: 11, padding: "3px 12px", borderRadius: 4, fontWeight: 700, fontFamily: "-apple-system,sans-serif" }}>YouTube Growth</span>
-          <h3 style={{
-            color: "white", fontSize: "clamp(22px,4vw,40px)", fontWeight: 600,
-            margin: "14px 0 10px", letterSpacing: "-0.02em",
-            fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif",
-          }}>YouTube Content</h3>
-          <p style={{ color: "rgba(255,255,255,0.68)", fontSize: 16, margin: "0 auto 24px", fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif", maxWidth: 500 }}>
-            Audience engagement, retention, and platform growth.
-          </p>
-        </div>
-
-        <div style={{ background: "#0a0000", padding: "20px clamp(16px,4vw,40px) 48px", overflowX: "auto", scrollbarWidth: "none", width: "100%", boxSizing: "border-box" }}>
-          <div style={{ display: "flex", gap: 14, minWidth: "max-content" }}>
-            {ytVideos.map((v, i) => (
-              <a key={i} href={`https://youtu.be/${v.ytId}`} target="_blank" rel="noopener noreferrer"
-                style={{ flexShrink: 0, width: "clamp(160px,22vw,220px)", textDecoration: "none" }}>
-                <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#1a0000", marginBottom: 8 }}>
-                  <img src={`https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg`} alt={v.title}
-                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0)", transition: "background 0.2s", display: "flex", alignItems: "center", justifyContent: "center" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.querySelector(".yt-play").style.opacity = "1"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(0,0,0,0)"; e.currentTarget.querySelector(".yt-play").style.opacity = "0"; }}
-                  >
-                    <div className="yt-play" style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(255,0,0,0.92)", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 0.2s" }}>
-                      <svg viewBox="0 0 24 24" width="20" height="20" fill="white" style={{ marginLeft: 2 }}><path d="M8 5v14l11-7z" /></svg>
-                    </div>
-                  </div>
-                  <div style={{ position: "absolute", top: 6, right: 6, background: "#ff0000", borderRadius: 4, padding: "2px 6px", fontSize: 9, fontWeight: 700, color: "white" }}>YT</div>
-                </div>
-                <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, margin: 0, fontFamily: "-apple-system,sans-serif", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.title}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* ── Cinematic Product Videos Section ─────────────────────────────── */}
       <div style={{ height: "clamp(32px,6vw,64px)", background: "#000" }} />
@@ -939,26 +949,12 @@ export default function App() {
       <div id="services" style={{ width: "100%" }}>
         <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <YTVideoBanner videoId={tvYTId} title="Video Reel 1" />
-          <ShortsStrip
-            title="Featured Shorts"
-            badge="Featured"
-            badgeBg="#333"
-            videos={serviceVideos1}
-            initialCount={6}
-          />
         </section>
 
-        <div style={{ height: "clamp(24px,5vw,48px)", background: "#000" }} />
+        <YouTubeContentSection />
 
         <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <YTVideoBanner videoId={musicYTId} title="Video Reel 2" />
-          <ShortsStrip
-            title="More Content"
-            badge="Latest"
-            badgeBg="linear-gradient(90deg,#833ab4,#fd1d1d,#fcb045)"
-            videos={serviceVideos2}
-            initialCount={6}
-          />
         </section>
       </div>
 
