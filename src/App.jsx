@@ -160,7 +160,7 @@ function GlobalNav() {
 function VideoBannerHero() {
   const isMobile = window.innerWidth < 768;
 
-  const scrollTo = (id) => {
+  const scrollTo = (id) => { 
     document.getElementById(id)?.scrollIntoView({
       behavior: "smooth",
     });
