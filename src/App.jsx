@@ -1629,6 +1629,7 @@ export default function App() {
       <GlobalNav />
       <div style={{ height: 58 }} />  {/* ← add this line */}
       <VideoBannerHero />
+      <HeroSection />
       <AboutSection />
       <div id="services" style={{ width: "100%" }}>
         <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
