@@ -179,7 +179,7 @@ function VideoBannerHero() {
     >
       {/* VIDEO */}
       <video
-        src="/assets/banner_video_new.mp4"
+        src="/banner_video_new.mp4"
         autoPlay
         muted
         loop
