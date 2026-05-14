@@ -157,7 +157,198 @@ function GlobalNav() {
     </nav>
   );
 }
+function VideoBannerHero() {
+  const isMobile = window.innerWidth < 768;
 
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <section
+      style={{
+        position: "relative",
+        width: "100%",
+        height: isMobile ? "42vh" : "78vh",
+        minHeight: isMobile ? "340px" : "600px",
+        overflow: "hidden",
+        background: "#000",
+      }}
+    >
+      {/* VIDEO */}
+      <video
+        src="/assets/main_banner_video.MP4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: isMobile ? "center top" : "center center",
+          zIndex: 0,
+        }}
+      />
+
+      {/* OVERLAY */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.15) 20%, rgba(0,0,0,0.82) 100%)",
+        }}
+      />
+
+      {/* CONTENT */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: isMobile ? "16px" : "40px",
+          left: isMobile ? "18px" : "60px",
+          right: isMobile ? "18px" : "60px",
+          zIndex: 3,
+
+          display: isMobile ? "block" : "flex",
+          justifyContent: "space-between",
+          alignItems: isMobile ? "flex-start" : "flex-end",
+        }}
+      >
+        {/* LEFT SIDE */}
+        <div>
+          <h1
+            style={{
+              color: "#fff",
+              fontSize: isMobile ? "28px" : "72px",
+              fontWeight: 700,
+              lineHeight: isMobile ? "1.02" : "1",
+              margin: 0,
+              letterSpacing: "-0.04em",
+              fontFamily:
+                "-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif",
+              textShadow: "0 2px 20px rgba(0,0,0,0.7)",
+              whiteSpace: isMobile ? "normal" : "nowrap",
+            }}
+          >
+            {isMobile ? (
+              <>
+                Content Creator <br />
+                & Editor
+              </>
+            ) : (
+              "Content Creator & Editor"
+            )}
+          </h1>
+
+          {/* MOBILE BUTTONS */}
+          {isMobile && (
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                marginTop: "18px",
+                flexWrap: "wrap",
+              }}
+            >
+              <a
+                href="#contact-section"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo("contact-section");
+                }}
+                style={{
+                  background: "#f7c948",
+                  color: "#000",
+                  fontSize: "13px",
+                  padding: "11px 20px",
+                  borderRadius: 999,
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontFamily: "-apple-system,sans-serif",
+                  boxShadow: "0 4px 18px rgba(247,201,72,0.35)",
+                }}
+              >
+                Get in Touch
+              </a>
+
+              <button
+                onClick={() => scrollTo("my-work")}
+                style={{
+                  background: "rgba(255,255,255,0.12)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255,255,255,0.28)",
+                  color: "#fff",
+                  fontSize: "13px",
+                  padding: "11px 20px",
+                  borderRadius: 999,
+                  cursor: "pointer",
+                  fontFamily: "-apple-system,sans-serif",
+                }}
+              >
+                View My Work
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* DESKTOP BUTTONS */}
+        {!isMobile && (
+          <div
+            style={{
+              display: "flex",
+              gap: 14,
+              flexShrink: 0,
+            }}
+          >
+            <a
+              href="#contact-section"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("contact-section");
+              }}
+              style={{
+                background: "#f7c948",
+                color: "#000",
+                fontSize: "15px",
+                padding: "13px 28px",
+                borderRadius: 999,
+                textDecoration: "none",
+                fontWeight: 700,
+                fontFamily: "-apple-system,sans-serif",
+                boxShadow: "0 4px 18px rgba(247,201,72,0.35)",
+              }}
+            >
+              Get in Touch
+            </a>
+
+            <button
+              onClick={() => scrollTo("my-work")}
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.28)",
+                color: "#fff",
+                fontSize: "15px",
+                padding: "13px 28px",
+                borderRadius: 999,
+                cursor: "pointer",
+                fontFamily: "-apple-system,sans-serif",
+              }}
+            >
+              View My Work
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 /* ─────────────────────────────────────────
    YT VIDEO BANNER
@@ -186,7 +377,7 @@ function YTVideoBanner({ videoId, title }) {
   return (
     <section
       ref={containerRef}
-      style={{ position: "relative", background: "#000", overflow: "hidden", height: "clamp(260px,45vw,520px)", width: "100%" }}
+      style={{ position: "relative", background: "#000", overflow: "hidden", height: "clamp(330px,60vw,630px)", width: "100%" }}
     >
       <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
         <iframe
@@ -1437,7 +1628,7 @@ export default function App() {
       <BackgroundMusic />
       <GlobalNav />
       <div style={{ height: 58 }} />  {/* ← add this line */}
-      <HeroSection />
+      <VideoBannerHero />
       <AboutSection />
       <div id="services" style={{ width: "100%" }}>
         <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
