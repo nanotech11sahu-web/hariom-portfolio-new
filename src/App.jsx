@@ -1661,7 +1661,6 @@ export default function App() {
       <BackgroundMusic />
       <GlobalNav />
       <div style={{ height: 58 }} />  {/* ← add this line */}
-      <HeroSection />
       <VideoBannerHero />
       <AboutSection />
       <div id="services" style={{ width: "100%" }}>
